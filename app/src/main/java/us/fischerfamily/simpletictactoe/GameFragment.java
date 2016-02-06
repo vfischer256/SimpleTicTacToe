@@ -1,98 +1,226 @@
 package us.fischerfamily.simpletictactoe;
 
-import android.content.Context;
-import android.net.Uri;
+import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
+import java.util.HashSet;
+import java.util.Set;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link GameFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link GameFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class GameFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    // Data structures go here...
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    static private int mTileIds[] = {R.id.tile1, R.id.tile2, R.id.tile3,
+            R.id.tile4, R.id.tile5, R.id.tile6, R.id.tile7, R.id.tile8,
+            R.id.tile9,};
 
-    private OnFragmentInteractionListener mListener;
-
-    public GameFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment GameFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static GameFragment newInstance(String param1, String param2) {
-        GameFragment fragment = new GameFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private Tile mEntireBoard = new Tile(this);
+    private Tile tiles[] = new Tile[9];
+    private Tile.Owner mPlayer = Tile.Owner.X;
+    private Set<Tile> mAvailable = new HashSet<Tile>();
+    private int mLast;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        // Retain this fragment across configuration changes.
+        setRetainInstance(true);
+        //   initGame();
+    }
+
+    private void clearAvailable() {
+        mAvailable.clear();
+    }
+
+    private void addAvailable(Tile tile) {
+        mAvailable.add(tile);
+    }
+
+    public boolean isAvailable(Tile tile) {
+        return mAvailable.contains(tile);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_game, container, false);
+        View rootView =
+                inflater.inflate(R.layout.board, container, false);
+        //    initViews(rootView);
+        // updateAllTiles();
+        return rootView;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+    private void initViews(View rootView) {
+        mEntireBoard.setView(rootView);
+        for (int tile = 0; tile < 9; tile++) {
+            View outer = rootView.findViewById(mTileIds[tile]);
+            ImageButton inner = (ImageButton) outer.findViewById
+                    (mTileIds[tile]);
+
+
+          /*  final int ftile = tile;
+            final int fSmall = small;
+            final Tile smallTile = mSmallTiles[tile][small];
+            smallTile.setView(inner);
+            inner.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (isAvailable(smallTile)) {
+                        makeMove(ftile, fSmall);
+                        switchTurns();
+                    }
+                }
+            });*/
         }
     }
 
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
+    private void switchTurns() {
+        mPlayer = mPlayer == Tile.Owner.X ? Tile.Owner.O : Tile
+                .Owner.X;
+    }
+
+    private void makeMove(int large, int small) {
+       /*
+        mLast = large;
+        mLastSmall = small;
+        Tile smallTile = mSmallTiles[large][small];
+        Tile largeTile = tiles[large];
+        smallTile.setOwner(mPlayer);
+        setAvailableFromLastMove(small);
+        Tile.Owner oldWinner = largeTile.getOwner();
+        Tile.Owner winner = largeTile.findWinner();
+        if (winner != oldWinner) {
+            largeTile.setOwner(winner);
+        }
+        winner = mEntireBoard.findWinner();
+        mEntireBoard.setOwner(winner);
+        updateAllTiles();
+        if (winner != Tile.Owner.NEITHER) {
+            ((GameActivity) getActivity()).reportWinner(winner);
+        }
+        */
+    }
+
+    public void restartGame() {
+        initGame();
+        initViews(getView());
+        updateAllTiles();
+    }
+
+    public void initGame() {
+        /*
+        Log.d("UT3", "init game");
+        mEntireBoard = new Tile(this);
+        // Create all the tiles
+        for (int large = 0; large < 9; large++) {
+            tiles[large] = new Tile(this);
+            for (int small = 0; small < 9; small++) {
+                mSmallTiles[large][small] = new Tile(this);
+            }
+            tiles[large].setSubTiles(mSmallTiles[large]);
+        }
+        mEntireBoard.setSubTiles(tiles);
+
+        // If the player moves first, set which spots are available
+        mLastSmall = -1;
+        mLast = -1;
+        setAvailableFromLastMove(mLastSmall);
+        */
+    }
+
+    private void setAvailableFromLastMove(int small) {
+        /*
+        clearAvailable();
+        // Make all the tiles at the destination available
+        if (small != -1) {
+            for (int dest = 0; dest < 9; dest++) {
+                Tile tile = mSmallTiles[small][dest];
+                if (tile.getOwner() == Tile.Owner.NEITHER)
+                    addAvailable(tile);
+            }
+        }
+        // If there were none available, make all squares available
+        if (mAvailable.isEmpty()) {
+            setAllAvailable();
+        }
+        */
+    }
+
+    private void setAllAvailable() {
+        /*
+        for (int large = 0; large < 9; large++) {
+            for (int small = 0; small < 9; small++) {
+                Tile tile = mSmallTiles[large][small];
+                if (tile.getOwner() == Tile.Owner.NEITHER)
+                    addAvailable(tile);
+            }
+        }
+        */
+    }
+
+    private void updateAllTiles() {
+        /*
+        mEntireBoard.updateDrawableState();
+        for (int large = 0; large < 9; large++) {
+            tiles[large].updateDrawableState();
+            for (int small = 0; small < 9; small++) {
+                mSmallTiles[large][small].updateDrawableState();
+            }
+        }
+        */
     }
 
     /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
+     * Create a string containing the state of the game.
      */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+
+
+    public String getState() {
+
+        StringBuilder builder = new StringBuilder();
+        builder.append(mLast);
+        builder.append(',');
+        /*
+        builder.append(mLastSmall);
+        builder.append(',');
+        for (int large = 0; large < 9; large++) {
+            for (int small = 0; small < 9; small++) {
+                builder.append(mSmallTiles[large][small].getOwner().name());
+                builder.append(',');
+            }
+        }
+        */
+
+        return builder.toString();
+
     }
+
+
+    /**
+     * Restore the state of the game from the given string.
+     */
+
+    public void putState(String gameData) {
+        String[] fields = gameData.split(",");
+        int index = 0;
+        mLast = Integer.parseInt(fields[index++]);
+        /*
+        mLastSmall = Integer.parseInt(fields[index++]);
+        for (int large = 0; large < 9; large++) {
+            for (int small = 0; small < 9; small++) {
+                Tile.Owner owner = Tile.Owner.valueOf(fields[index++]);
+                mSmallTiles[large][small].setOwner(owner);
+            }
+        }
+        setAvailableFromLastMove(mLastSmall);
+        updateAllTiles();
+        */
+    }
+
 }
+

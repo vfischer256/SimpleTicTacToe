@@ -29,7 +29,7 @@ public class MainFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), GameActivity.class);
-        //        intent.putExtra(GameActivity.KEY_RESTORE, true);
+                intent.putExtra(GameActivity.KEY_RESTORE, true);
                 getActivity().startActivity(intent);
             }
         });
