@@ -128,10 +128,6 @@ public class Tile {
     }
 
     public Owner findWinner() {
-        // If owner already calculated, return it
-        if (getOwner() != Owner.NEITHER)
-            return getOwner();
-
         int totalX[] = new int[4];
         int totalO[] = new int[4];
         countCaptures(totalX, totalO);
