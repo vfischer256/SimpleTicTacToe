@@ -6,7 +6,7 @@
     <dimen name="corner_radius">4dp</dimen>
     <dimen name="board_padding">2dp</dimen>
     <dimen name="elevation_low">4dp</dimen>
-    <dimen name="tile_size">30dp</dimen>
+    <dimen name="tile_size">70dp</dimen>
     <dimen name="tile_margin">0dp</dimen>
     <dimen name="tile_padding">3dp</dimen>
     <dimen name="elevation_high">8dp</dimen>

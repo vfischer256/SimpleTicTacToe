@@ -6,6 +6,9 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.Window;
+import android.view.WindowManager;
 
 public class GameActivity extends Activity {
     public static final String KEY_RESTORE = "key_restore";
@@ -31,6 +34,7 @@ public class GameActivity extends Activity {
     }
 
     public void reportWinner(final Tile.Owner winner) {
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         if (winner == Tile.Owner.BOTH) {
             builder.setMessage("It's a TIE!");
@@ -46,6 +50,9 @@ public class GameActivity extends Activity {
                     }
                 });
         final Dialog dialog = builder.create();
+
+        Window window = dialog.getWindow();
+        window.setGravity(Gravity.TOP);
         dialog.show();
 
         // Reset the board to the initial position

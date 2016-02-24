@@ -87,10 +87,8 @@ public class GameFragment extends Fragment {
 
         tile.setOwner(mPlayer);
         setAvailableFromLastMove(pos);
-
-        Tile.Owner winner = mEntireBoard.findWinner();
-        mEntireBoard.setOwner(winner);
         updateAllTiles();
+        Tile.Owner winner = mEntireBoard.findWinner();
         if (winner != Tile.Owner.NEITHER) {
             ((GameActivity) getActivity()).reportWinner(winner);
         }
